@@ -255,9 +255,9 @@ Zerocoin 扩展了比特币协议，通过创建两种新交易类型：mint 与
 
   我们通过修改 coin commitment 的获取方式解决了上述问题，使用伪随机函数来获取序列号与定位付款目标。我们使用了 3 个伪随机函数 (从单个伪随机函数派生出来)。对于一个种子 x，3 个伪随机函数的表现形式为 PRF[x][addr]、PRF[x][pk]、PRF[x][sn]。
 
-  为了提供付款的目标，我们使用 address 的概念：每一位用户生成一个地址密钥对 (apk, ask)。用户的 coins 需要包含 apk，而且只有知道 ask 的情况下才能花费 coins。ask 是通过随机挑选生成的，令 apk := PRF[x][addr](0)，用户可以生成任意个地址密钥对。
+  为了提供付款的目标，我们使用 address 的概念：每一位用户生成一个地址密钥对 (apk, ask)。用户的 coins 需要包含 apk，而且只有知道 ask 的情况下才能花费 coins。ask 是通过随机挑选生成的，令 apk := PRF[x][addr]\(0)，用户可以生成任意个地址密钥对。
 
-  接下来，我们重新设计了发行交易来允许更大的功能性。为了发行一个想要的价值 v 的 coin，用户 u 首先挑选了一个随机数 ρ，ρ 是一个决定序列号 sn 的安全值，sn := PRF[x][sn](ρ)。接下来 u 使用两阶段提交 (apk, v, ρ)：(i) 用户 u 计算 k :=  COMMr(apk || ρ) 对于随机挑选的 r 值；(ii) 用户 u 计算 cm := COMMs(v || k) 对于随机挑选的 s。发行结果是 coin c := (apk, v, ρ, r, s, cm) 和一笔发行交易 txMint := (v, k, s, cm)。任何人都可以通过 COMMs(v || k) 来验证 cm 是否是一个价值为 v 的 coin 的承诺，但是却不能分辨出拥有者 apk 与 序列号 sn (从 ρ 得出)，因为这些都统统被隐藏在了 k 中。和以前一样，只有用户 u 花费了等量数值 v 的 BTC，txMin 才可以被 ledger 所接受。
+  接下来，我们重新设计了发行交易来允许更大的功能性。为了发行一个想要的价值 v 的 coin，用户 u 首先挑选了一个随机数 ρ，ρ 是一个决定序列号 sn 的安全值，sn := PRF[x][sn]\(ρ)。接下来 u 使用两阶段提交 (apk, v, ρ)：(i) 用户 u 计算 k :=  COMMr(apk || ρ) 对于随机挑选的 r 值；(ii) 用户 u 计算 cm := COMMs(v || k) 对于随机挑选的 s。发行结果是 coin c := (apk, v, ρ, r, s, cm) 和一笔发行交易 txMint := (v, k, s, cm)。任何人都可以通过 COMMs(v || k) 来验证 cm 是否是一个价值为 v 的 coin 的承诺，但是却不能分辨出拥有者 apk 与 序列号 sn (从 ρ 得出)，因为这些都统统被隐藏在了 k 中。和以前一样，只有用户 u 花费了等量数值 v 的 BTC，txMin 才可以被 ledger 所接受。
 
   pour 交易花费 coins，使用想要花费的 coins 作为输入，生成新鲜的 output coins，output coins 的总价值要等于 input coins 的总价值。假设持有地址密钥对 (ask, apk) 的用户 u 想要花费他的 coins c_old = (apk_old, v_old, ρ_old, r_old, s_old, cm_old)，产生两个 new coins c1_new, c2_new，并且 v_old = v1_new + v2_new，相应的两个目标地址为 apk1_new、apk2_new (可以属于 u 或者任何其它用户)。对于 i ∈ {1, 2}，用户 u 执行下列操作：
   - (Ⅰ) u 随机挑选能够获得序列号的随机数 ρi_new；
@@ -272,9 +272,9 @@ Zerocoin 扩展了比特币协议，通过创建两种新交易类型：mint 与
 
   1. coins 是正确构建的：对于 c_old，下列成立：k_old = COMMr_old(apk_old || ρ_old) 与 cm_old = COMMs_old(v_old || k_old)；c1_new 与 c2_new 也是类似；
 
-  2. 地址私钥匹配地址公钥，即 apk_old = PRF[ask_old][addr](0)；
+  2. 地址私钥匹配地址公钥，即 apk_old = PRF[ask_old][addr]\(0)；
 
-  3. 序列号被正确计算：sn_old = PRF[ask_old][sn_old](ρ_old)；
+  3. 序列号被正确计算：sn_old = PRF[ask_old][sn_old]\(ρ_old)；
 
  4. coin commitment cm_old 出现在根为 rt 的 Merkle 树的叶子节点中；
 
@@ -282,7 +282,7 @@ Zerocoin 扩展了比特币协议，通过创建两种新交易类型：mint 与
 ```
   即 pour 交易的形式为 **txPour := (rt, sn_old, cm1_new, cm2_new, πPOUR)**，被添加到 ledger 中，和之前一样，如若 sn_old 在先前的一笔交易中出现，那么该交易就会认为是双花而被拒绝进入 ledger。
 
-  如若用户 u 不知道与 apk1_new 相关联的 ask1_new，那么 u 是不能花费 c1_new，因为 u 无法在随后的 pour 操作的见证中提供 ask1_new，即无法生成合格有效的 πPOUR。还有就是当拥有 ask1_new 的用户花费 c1_new 的时候，用户 u 是无法追踪的，因为 u 不知道 c1_new 对应的序列号 sn1_new (sn1_new := PRF[ask1_new][sn](ρ1_new) )。
+  如若用户 u 不知道与 apk1_new 相关联的 ask1_new，那么 u 是不能花费 c1_new，因为 u 无法在随后的 pour 操作的见证中提供 ask1_new，即无法生成合格有效的 πPOUR。还有就是当拥有 ask1_new 的用户花费 c1_new 的时候，用户 u 是无法追踪的，因为 u 不知道 c1_new 对应的序列号 sn1_new (sn1_new := PRF[ask1_new][sn]\(ρ1_new) )。
 
   注意，txPour 没有披露任何关于 c_old 的价值是如何分配到 ci_new 的信息，也没有披露 c_old 对应花费的是哪一笔 cm_old 的信息，还没有披露 ci_new 对应的目标地址公钥的信息，因此，转账是以完全匿名的方式进行的。
 
@@ -302,7 +302,7 @@ Zerocoin 扩展了比特币协议，通过创建两种新交易类型：mint 与
 
   - (ii) 计算 hSig := CRH(pk_sig)；
 
-  - (iii) 计算两个值 h1 := PRF[ask1_old][pk](hSig) 与 h2 := PRF[ask2_old][pk](hSig)，作用是作为消息验证码将 hSig 绑定到两个地址的私钥上；
+  - (iii) 计算两个值 h1 := PRF[ask1_old][pk]\(hSig) 与 h2 := PRF[ask2_old][pk]\(hSig)，作用是作为消息验证码将 hSig 绑定到两个地址的私钥上；
 
   - (iv) 修改 POUR 来包含 hSig、h1、h2，并且证明后两者被正确地计算出来；
 
