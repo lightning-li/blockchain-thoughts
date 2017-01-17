@@ -8,3 +8,4 @@
 * [主流区块链简介](blockchain_intro.md)
 * [比特币区块链规则更新过程](bitcoinVersioning.md)
 * [Factom 简介](factom_intro.md)
+* [BIP 9 - 使用 version 位进行比特币软件升级](bip-0009.md)
