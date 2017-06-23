@@ -9,3 +9,5 @@
 * [比特币区块链规则更新过程](bitcoinVersioning.md)
 * [Factom 简介](factom_intro.md)
 * [BIP 9 - 使用 version 位进行比特币软件升级](bip-0009.md)
+* [libsnark 库使用示例介绍](libsnark-example.md)
+* [zkSNARK 算法简介](zkSNARK-intro.md)
