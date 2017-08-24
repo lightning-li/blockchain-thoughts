@@ -11,3 +11,4 @@
 * [BIP 9 - 使用 version 位进行比特币软件升级](bip-0009.md)
 * [libsnark 库使用示例介绍](libsnark-example.md)
 * [zkSNARK 算法简介](zkSNARK-intro.md)
+* [区块链中的抵抗审查](blockchain-censorship-resistance-mean.md)
