@@ -12,3 +12,5 @@
 * [libsnark 库使用示例介绍](libsnark-example.md)
 * [zkSNARK 算法简介](zkSNARK-intro.md)
 * [区块链中的抵抗审查](blockchain-censorship-resistance-mean.md)
+* [GF(p)=>GF(p^n)](gfp-gfpn.md)
+* [HyperLogLog 原理](hyperloglog-theory.md)
