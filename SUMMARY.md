@@ -15,3 +15,4 @@
 * [GF(p)=>GF(p^n)](gfp-gfpn.md)
 * [HyperLogLog 原理](hyperloglog-theory.md)
 * [零知识证明之 zkSNARKs 算法](zero-knowledge-zkSNARKs.md)
+* [区块链隐私保护之门罗币](monero-blockchain.md)
