@@ -16,3 +16,5 @@
 * [HyperLogLog 原理](hyperloglog-theory.md)
 * [零知识证明之 zkSNARKs 算法](zero-knowledge-zkSNARKs.md)
 * [区块链隐私保护之门罗币](monero-blockchain.md)
+* [可验证随机数函数](verifiable-random-function.md)
+* [共识算法总结](consensus-algorithm.md)
